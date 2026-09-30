@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Message</title>
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151515" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{--ff:"Helvetica Neue",Helvetica,Arial,sans-serif;--bg:#fff;--ink:#222;--dim:#a0a0a0;--line:#eee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151515;--ink:#e6e6e6;--dim:#777;--line:#262626}}
+:root[data-theme="dark"]{--bg:#151515;--ink:#e6e6e6;--dim:#777;--line:#262626}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 60px)}
+*{box-sizing:border-box;margin:0;padding:0;border-radius:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font:13px/1.75 var(--ff);font-size:calc(13px*var(--s,1));-webkit-font-smoothing:antialiased;text-transform:lowercase;letter-spacing:.02em;min-height:100vh}
+.text,.rep,.m,textarea,.in,.row span,.chat span,.prof p{text-transform:none;letter-spacing:0}
+a{color:inherit;text-decoration:none}
+.at{border-bottom:1px solid var(--dim)}
+#acl{position:fixed;z-index:7;background:var(--bg);border:1px solid var(--line);min-width:200px;max-width:calc(100vw - 24px);padding:6px 0}
+#acl button{display:flex;justify-content:space-between;gap:24px;width:100%;text-align:left;padding:7px 18px;color:var(--dim)}
+#acl button.on{color:var(--ink)}#acl em{font-style:normal;color:var(--dim)}
+.set button{display:block;padding:8px 0}.set{margin-top:22px;margin-bottom:8px}
+button,input,textarea{font:inherit;color:inherit;background:none;border:0;outline:0;text-transform:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+textarea,.in{text-transform:none;letter-spacing:0}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:22px 24px}
+.burger{position:relative;padding:8px 0 8px 14px}
+.burger i{display:block;width:18px;height:1px;background:var(--ink);margin:5px 0}
+.burger.dot::after{content:"";position:absolute;top:6px;right:-6px;width:5px;height:5px;background:var(--ink);border-radius:50%}
+.panel{position:fixed;top:calc(env(safe-area-inset-top,0px) + 52px);right:20px;background:var(--bg);border:1px solid var(--line);min-width:170px;padding:8px 0;z-index:5}
+.panel a,.panel button{display:flex;justify-content:space-between;width:100%;text-align:left;padding:7px 20px}
+.panel em{font-style:normal;color:var(--dim)}
+main{max-width:440px;margin:0 auto;padding:12vh 24px 20vh}
+.gate{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22vh 24px 0}
+.gate form{width:100%;max-width:240px}.gate .in{text-align:center}
+.gate p{color:var(--dim);margin:8px 0 32px}
+.in{display:block;width:100%;padding:8px 0;border-bottom:1px solid var(--line);margin-bottom:22px;font-size:calc(14px*var(--s,1))}
+.in:focus{border-color:var(--ink)}
+.in:focus-visible{outline:none}
+textarea::placeholder,.in::placeholder{color:var(--dim)}
+.go{border-bottom:1px solid var(--ink)}
+.go:disabled{color:var(--dim);border-color:var(--line);cursor:default}
+.dim,.bar button,.acts button,.sortrow button,.thread>button{color:var(--dim)}
+.bar button:hover,.acts button:hover,.acts button.on,.sortrow button:hover,.thread>button:hover{color:var(--ink)}
+.toast{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);text-align:center;color:var(--dim);z-index:6}
+.err{color:var(--dim);min-height:22px;margin-bottom:8px}
+.compose{margin-bottom:64px}
+textarea{width:100%;min-height:44px;resize:none;font-size:calc(14px*var(--s,1));line-height:1.6}
+.bar{display:flex;gap:22px;margin-top:10px;align-items:center}
+#post{margin-left:auto}
+.sortrow{display:flex;gap:22px;margin-bottom:56px}.sortrow button.on{color:var(--ink)}
+.who button{color:var(--dim)}.who button:hover{color:var(--ink)}
+.post{margin-bottom:56px;cursor:pointer}.post input{cursor:text}
+.zoom .text{font-size:calc(18px*var(--s,1));line-height:1.5;margin:10px 0 14px}.zoom .acts span{padding:8px 0}.zoom .thread{padding-left:0;margin-top:28px}
+.who{display:flex;align-items:center;gap:12px;color:var(--dim)}.who a{color:var(--ink)}
+.text{font-size:calc(14px*var(--s,1));margin:4px 0 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.img{display:block;max-width:100%;max-height:80vh;margin:10px 0 12px;object-fit:contain}
+.thumb{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;margin:10px 0 12px;background:var(--line)}
+.acts{display:flex;gap:26px}.acts button{padding:8px 0}
+.rbar{display:flex;justify-content:space-between;align-items:center;margin-top:4px}.rbar button:first-child{color:var(--dim)}
+.thread{margin-top:18px;padding-left:18px}
+.rep{margin-bottom:14px}
+.thread .in{margin:0 0 14px}
+.info{color:var(--dim);margin-top:6px}
+.prof{margin-bottom:56px}.prof h2{font-size:calc(13px*var(--s,1));font-weight:400}.prof p{color:var(--dim)}.prof .go{display:inline-block;margin-top:14px}
+.sec{color:var(--dim);margin:40px 0 16px}
+.row{display:block;margin-bottom:18px}.row b{font-weight:400}.row span,.row em{color:var(--dim);margin-left:12px;font-style:normal}
+.msgs{display:flex;flex-direction:column;margin:0 0 36px}
+.day{align-self:center;color:var(--dim);margin:8px 0 26px}
+.g{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:26px}.g.me{align-items:flex-end}
+.g .n{color:var(--dim);margin-bottom:7px}.g .n i{font-style:normal;margin-left:10px}.g:not(.me) .n b{color:var(--ink);font-weight:400}
+.g .m{max-width:84%;padding:11px 15px;margin-bottom:4px;border:1px solid var(--line);font-size:calc(14px*var(--s,1));white-space:pre-wrap;overflow-wrap:anywhere}
+.g.me .m{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chat{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:15px 0;border-bottom:1px solid var(--line)}
+.chat div{min-width:0}.chat b{display:block;font-weight:400}
+.chat span{display:block;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat em{font-style:normal;color:var(--dim);white-space:nowrap}
+.empty{color:var(--dim)}
+h1.page{font-size:calc(13px*var(--s,1));font-weight:400;color:var(--dim);margin:0 0 40px}
+label.l{display:block;color:var(--dim)}
+html{-webkit-text-size-adjust:100%}*{-webkit-tap-highlight-color:transparent}button,a{touch-action:manipulation}
+@media (pointer:coarse){input,textarea{font-size:max(16px,calc(16px*var(--s,1)))!important}.acts button,.sortrow button,.bar button,.rbar button,.who button{padding-top:10px;padding-bottom:10px}.panel a,.panel button{padding-top:12px;padding-bottom:12px}}
+@media (max-width:480px){main{padding:9vh 22px 24vh}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="acl" hidden role="listbox" aria-label="people"></div>
+<script>
+const $=i=>document.getElementById(i),app=$("app");
+let db=null,user=null,assets=null,me=null,S=null,ready=false,got={},rp=[],rl=[],rr=[],rd=[],rq=[],profs={},drafts={},tab="new",menu=false,err="",toast="",busy=false,remote=false,local=false,mode="signup",started=false,nseen=0,seen=0;const rnd={};
+const esc=s=>{const d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML};
+const store=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+const TAGS=["post it once. it stays.","follow someone new today.","your connections are waiting.","say something worth a like.","see what is trending.","leave a comment on something.","share a photo. keep it simple.","nobody is performing. just post.","find your connections.","start a thread.","like what you mean.","someone posted while you were gone.","your feed, in your order.","reply to the last thing you read.","see who is posting right now."];
+const pickTag=()=>{const last=store("lasttag")||"",o=TAGS.filter(t=>t!==last),t=o[Math.floor(Math.random()*o.length)];store("lasttag",t);return t};let tag=pickTag();
+const FS={small:.9,medium:1,large:1.15,"extra large":1.3},FF={sans:'"Helvetica Neue",Helvetica,Arial,sans-serif',serif:'Georgia,"Times New Roman",serif',mono:'ui-monospace,Menlo,Consolas,monospace'};
+const look=()=>{const r=document.documentElement;r.style.setProperty("--s",FS[store("fs")]||1);r.style.setProperty("--ff",FF[store("ff")]||FF.sans);};look();
+const theme=m=>{const r=document.documentElement;if(m==="light"||m==="dark")r.dataset.theme=m;else delete r.dataset.theme};theme(store("theme"));
+const ago=t=>{const s=(Date.now()-t)/1000;return s<60?"now":s<3600?Math.floor(s/60)+"m":s<86400?Math.floor(s/3600)+"h":Math.floor(s/86400)+"d"};
+const kb=n=>n>1048576?(n/1048576).toFixed(1)+"mb":Math.round(n/1024)+"kb";
+const loggedOut=()=>!remote&&!local&&store("out")==="1";
+const blobSrc=id=>(remote?"/img/":"/_blob/")+esc(id);
+const av=()=>"";
+const route=()=>{const p=(location.hash||"#/").slice(2).split("/");let a=p[1]||"";try{a=decodeURIComponent(a)}catch(e){}return{n:p[0]||"feed",a}};
+const userOf=h=>S.users.find(u=>u.handle===h);
+function toks(t){t=String(t==null?"":t);const o=[],re=/@([a-z0-9._]{2,20})/gi;let i=0,m;
+  while((m=re.exec(t))){let h=m[1].toLowerCase();while(h.length>=2&&!userOf(h)&&/[._]$/.test(h))h=h.slice(0,-1);if(!userOf(h))continue;
+    const end=m.index+1+h.length;if(m.index>i)o.push({t:t.slice(i,m.index)});o.push({h});i=end;re.lastIndex=end}
+  if(i<t.length)o.push({t:t.slice(i)});return o}
+const rich=t=>toks(t).map(x=>x.h?`<a class="at" href="#/u/${esc(x.h)}">@${esc(x.h)}</a>`:esc(x.t)).join("");
+const ments=t=>new Set(toks(t).filter(x=>x.h).map(x=>x.h));
+const likesOf=id=>S.likes.filter(l=>l.post===id);
+const repsOf=id=>S.replies.filter(r=>r.post===id).sort((a,b)=>a.ts-b.ts);
+const convo=k=>S.dms.filter(d=>d.from===k||d.to===k).sort((a,b)=>a.ts-b.ts);
+function build(){
+  const H={},R={};Object.keys(profs).forEach(k=>{if(profs[k].handle){H[k]=profs[k].handle;R[profs[k].handle]=k}});
+  const h=k=>H[k]||"someone";
+  S={me:H[me],R,users:Object.keys(H).map(k=>({handle:H[k],bio:profs[k].bio||""})),
+    posts:rp.map(p=>({...p,by:h(p.by)})),likes:rl.map(l=>({...l,by:h(l.by)})),replies:rr.map(r=>({...r,by:h(r.by)})),
+    reqs:rq.map(r=>({...r,from:h(r.from),to:h(r.to)})),
+    dms:rd.filter(d=>d.from===me||d.to===me).map(d=>({...d,from:h(d.from),to:h(d.to)}))};
+}
+function conn(k){const r=S.reqs.find(r=>(r.from===S.me&&r.to===k)||(r.from===k&&r.to===S.me));return r||(convo(k).length?{status:"accepted",legacy:1}:null)}
+function notifs(){const mine=new Set(S.posts.filter(p=>p.by===S.me).map(p=>p.id)),n=[];
+  S.likes.forEach(l=>{if(mine.has(l.post)&&l.by!==S.me)n.push({ts:l.ts||1,t:`@${l.by} liked your post`,href:"#/p/"+l.post})});
+  S.replies.forEach(r=>{if(mine.has(r.post)&&r.by!==S.me)n.push({ts:r.ts,t:`@${r.by} commented: ${r.text.slice(0,60)}`,href:"#/p/"+r.post})});
+  S.posts.forEach(p=>{if(p.by!==S.me&&p.text&&ments(p.text).has(S.me))n.push({ts:p.ts,t:`@${p.by} mentioned you in a post`,href:"#/p/"+p.id})});
+  S.replies.forEach(r=>{if(r.by!==S.me&&!mine.has(r.post)&&ments(r.text).has(S.me))n.push({ts:r.ts,t:`@${r.by} mentioned you in a comment`,href:"#/p/"+r.post})});
+  S.dms.forEach(d=>{if(d.to===S.me)n.push({ts:d.ts,t:`@${d.from} sent you a message`,href:"#/m/"+d.from})});
+  S.reqs.forEach(r=>{if(r.to===S.me&&r.status==="pending")n.push({ts:r.ts,t:`@${r.from} wants to message you`,href:"#/m/"+r.from});if(r.from===S.me&&r.status==="accepted")n.push({ts:r.ats||r.ts,t:`@${r.to} accepted your message request`,href:"#/m/"+r.to})});
+  return n.sort((a,b)=>b.ts-a.ts).slice(0,60)}
+function score(h){const mine=S.posts.filter(p=>p.by===h);return mine.length+2*mine.reduce((n,p)=>n+likesOf(p.id).length,0)}
+function shell(b){const u=notifs().filter(n=>n.ts>seen).length;
+  app.innerHTML=`<header><a class="brand" href="#/">the message</a><button id="mn" class="burger${u?" dot":""}" aria-label="menu" aria-expanded="${menu}"><i></i><i></i><i></i></button></header>`+
+  (menu?`<div class="panel"><a href="#/">feed</a><a href="#/messages">messages</a><a href="#/notifs">notifications${u?`<em>${u}</em>`:""}</a><a href="#/liked">liked</a><a href="#/u/${esc(S.me)}">my profile</a><a href="#/settings">settings</a><button id="out">log out</button></div>`:"")+`<main>${b}</main>`+(toast?`<div class="toast" role="status">${esc(toast)}</div>`:"")}
+function auth(){const has=!!profs[me];
+  app.innerHTML=`<div class="gate"><h1>the message</h1><p>${esc(tag)}</p>`+(has?`<button class="go" id="login">log in</button>`:
+  `<form id="af"><input class="in" id="h" placeholder="choose a handle" maxlength="20" autocapitalize="none" spellcheck="false" aria-label="handle" value="${esc(drafts.h||"")}"><div class="err">${esc(err||"letters, numbers, dots or underscores")}</div><button class="go" ${busy?"disabled":""}>create account</button></form>`)+`</div>`}
+function postHTML(p){const lk=likesOf(p.id),rs=repsOf(p.id),o=drafts["o"+p.id],src=p.img?blobSrc(p.img):p.imgData?esc(p.imgData):"";
+  return `<article class="post" data-id="${esc(p.id)}">${av(p.by)}<div><div class="who"><a href="#/u/${esc(p.by)}">@${esc(p.by)}</a>${ago(p.ts)}</div>${p.text?`<div class="text">${rich(p.text)}</div>`:""}${src?`<img class="thumb" loading="lazy" alt="image in post" src="${src}">`:""}
+  <div class="acts"><button data-a="c" data-i="${esc(p.id)}" class="${o?"on":""}">comment ${rs.length}</button><button data-a="l" data-i="${esc(p.id)}" class="${lk.some(l=>l.by===S.me)?"on":""}">${lk.some(l=>l.by===S.me)?"liked":"like"} ${lk.length}</button>${p.by===S.me?`<button data-a="d" data-i="${esc(p.id)}">${drafts["c"+p.id]?"sure?":"delete"}</button>`:""}</div>
+  ${o?`<div class="thread">${rs.length?"":`<div class="rep dim">no comments yet</div>`}${rs.map(r=>`<div class="rep"><div class="who"><a href="#/u/${esc(r.by)}">@${esc(r.by)}</a>${ago(r.ts)}${r.by===S.me&&!String(r.id).startsWith("tmp")?`<button data-a="dr" data-i="${esc(r.id)}">${drafts["c"+r.id]?"sure?":"delete"}</button>`:""}</div>${rich(r.text)}</div>`).join("")}<input class="in" id="r-${esc(p.id)}" data-p="${esc(p.id)}" maxlength="280" placeholder="write a comment" aria-label="write a comment" value="${esc(drafts["r"+p.id]||"")}"><div class="rbar"><span></span><button class="go" data-a="rs" data-i="${esc(p.id)}">send</button></div></div>`:""}</div></article>`}
+function feed(){const d=drafts;let l=S.posts.slice();
+  if(tab==="old")l.sort((a,b)=>a.ts-b.ts);
+  else if(tab==="trending")l.sort((a,b)=>(likesOf(b.id).length+2*repsOf(b.id).length)-(likesOf(a.id).length+2*repsOf(a.id).length)||b.ts-a.ts);
+  else if(tab==="liked"){const t=new Map();S.likes.forEach(l=>{if(l.by===S.me)t.set(l.post,l.ts||0)});l=l.filter(p=>t.has(p.id)).sort((a,b)=>t.get(b.id)-t.get(a.id))}
+  else l.sort((a,b)=>b.ts-a.ts);
+  shell(`<section class="compose"><textarea id="t" maxlength="280" rows="2" placeholder="say something" aria-label="write a post">${esc(d.t||"")}</textarea>${d.url?`<img class="thumb" src="${d.url}" alt="attached image">`:""}${d.info?`<div class="info">${esc(d.info)}</div>`:""}
+  <div class="bar"><input type="file" id="f" accept="image/*" hidden><button data-a="pick">${d.blob?"change image":"image"}</button>${d.blob?`<button data-a="rm">remove</button>`:""}${busy?`<span class="dim">posting</span>`:""}<button class="go" id="post" ${((d.t||"").trim()||d.blob)&&!busy?"":"disabled"}>send</button></div></section>
+  <div class="sortrow"><button class="on" data-a="sort" aria-label="change sort, now showing ${tab}">${tab}</button></div>`+(l.length?l.map(postHTML).join(""):`<p class="empty">${tab==="liked"?"nothing liked yet. tap like on a post to keep it here.":"nothing here yet"}</p>`))}
+function profile(h){const u=userOf(h);if(!u)return shell(`<p class="empty">no one has that handle</p>`);
+  const ps=S.posts.filter(p=>p.by===h).sort((a,b)=>b.ts-a.ts),lk=ps.reduce((n,p)=>n+likesOf(p.id).length,0);
+  shell(`<section class="prof">${av(h,"lg",1)}<div><h2>@${esc(h)}</h2><p>${esc(u.bio||"no bio yet")}</p><p>${ps.length} posts, ${lk} likes</p>${h===S.me?`<a class="go" href="#/settings">edit profile</a>`:`<a class="go" href="#/m/${esc(h)}">message</a>`}</div></section>`+(ps.length?ps.map(postHTML).join(""):`<p class="empty">no posts yet</p>`))}
+function postView(id){const x=S.posts.find(p=>p.id===id);
+  if(!x)return shell(`<button class="dim" data-a="back">back</button><p class="empty">that post is gone</p>`);
+  const lk=likesOf(id),rs=repsOf(id).reverse(),liked=lk.some(l=>l.by===S.me),src=x.img?blobSrc(x.img):x.imgData?esc(x.imgData):"";
+  const when=new Date(x.ts).toLocaleString([],{hour:"numeric",minute:"2-digit",day:"numeric",month:"short"});
+  shell(`<button class="dim" data-a="back">back</button><article class="zoom"><div class="who" style="margin-top:36px"><a href="#/u/${esc(x.by)}">@${esc(x.by)}</a>${esc(when)}</div>${x.text?`<div class="text">${rich(x.text)}</div>`:""}${src?`<img class="img" alt="image in post" src="${src}">`:""}
+  <div class="acts"><button data-a="l" data-i="${esc(id)}" class="${liked?"on":""}">${liked?"liked":"like"} ${lk.length}</button><span class="dim">comments ${rs.length}</span>${x.by===S.me?`<button data-a="d" data-i="${esc(id)}">${drafts["c"+id]?"sure?":"delete"}</button>`:""}</div>
+  <div class="thread"><input class="in" id="r-${esc(id)}" data-p="${esc(id)}" maxlength="280" placeholder="write a comment" aria-label="write a comment" value="${esc(drafts["r"+id]||"")}"><div class="rbar"><span></span><button class="go" data-a="rs" data-i="${esc(id)}">send</button></div>
+  ${rs.map(r=>`<div class="rep"><div class="who"><a href="#/u/${esc(r.by)}">@${esc(r.by)}</a>${ago(r.ts)}${r.by===S.me&&!String(r.id).startsWith("tmp")?`<button data-a="dr" data-i="${esc(r.id)}">${drafts["c"+r.id]?"sure?":"delete"}</button>`:""}</div>${rich(r.text)}</div>`).join("")}</div></article>`)}
+function messages(){
+  const pend=S.reqs.filter(r=>r.to===S.me&&r.status==="pending").sort((a,b)=>b.ts-a.ts);
+  const chats=[];S.users.forEach(u=>{if(u.handle===S.me)return;const c=conn(u.handle);if(!c)return;
+    if(c.status==="accepted"){const l=convo(u.handle).pop();chats.push({u,ts:l?l.ts:(c.ats||c.ts||0),sub:l?(l.from===S.me?"you: ":"")+l.text.slice(0,50):"say hi"})}
+    else if(c.status==="pending"&&c.from===S.me)chats.push({u,ts:c.ts,sub:"request sent"})});
+  chats.sort((a,b)=>b.ts-a.ts);
+  const used=new Set(S.users.filter(u=>u.handle!==S.me&&conn(u.handle)).map(u=>u.handle));
+  const rec=S.users.filter(u=>u.handle!==S.me&&!used.has(u.handle)).map(u=>({u,s:score(u.handle)+(rnd[u.handle]=rnd[u.handle]??Math.random()*3)})).sort((a,b)=>b.s-a.s).slice(0,8);
+  const row=(u,sub,t)=>`<a class="chat" href="#/m/${esc(u.handle)}"><div><b>@${esc(u.handle)}</b><span>${esc(sub)}</span></div>${t?`<em>${t}</em>`:""}</a>`;
+  shell(`<h1 class="page">messages</h1>`+(pend.length?`<div class="sec">requests</div>`+pend.map(r=>row(userOf(r.from)||{handle:r.from},r.text.slice(0,50),"new")).join(""):"")+
+   (chats.length?`<div class="sec">chats</div>`+chats.map(c=>row(c.u,c.sub,c.ts?ago(c.ts):"")).join(""):"")+
+   `<div class="sec">people you might like</div>`+(rec.length?rec.map(r=>row(r.u,r.u.bio||"send a request")).join(""):`<p class="empty">no one else has an account yet.</p>`))}
+const tm=t=>new Date(t).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+const dayLbl=t=>{const d=new Date(t),n=new Date(),y=new Date(Date.now()-864e5);return d.toDateString()===n.toDateString()?"today":d.toDateString()===y.toDateString()?"yesterday":d.toLocaleDateString([],{day:"numeric",month:"short"})};
+function bubbles(list){const gs=[];let last=null,ld="";
+  list.forEach(m=>{const d=new Date(m.ts).toDateString();if(d!==ld){gs.push({day:m.ts});ld=d;last=null}
+    if(last&&last.from===m.from&&m.ts-last.te<6e5){last.items.push(m);last.te=m.ts}else{last={from:m.from,ts:m.ts,te:m.ts,items:[m]};gs.push(last)}});
+  return gs.map(g=>g.day?`<div class="day">${dayLbl(g.day)}</div>`:`<div class="g${g.from===S.me?" me":""}"><div class="n"><b>${g.from===S.me?"you":"@"+esc(g.from)}</b><i>${tm(g.ts)}</i></div>${g.items.map(m=>`<div class="m">${esc(m.text)}</div>`).join("")}</div>`).join("")}
+let tlast={};
+function thread(h){const u=userOf(h);if(!u||h===S.me)return shell(`<p class="empty">no one to message</p>`);
+  const c=conn(h),mine=c&&c.from===S.me,inp=ph=>`<input class="in" id="m" maxlength="500" placeholder="${ph}" aria-label="write a message" value="${esc(drafts["m"+h]||"")}">`;
+  let body="",foot="";
+  if(!c)foot=inp("write a message to send a request");
+  else if(c.status==="accepted")body=bubbles(convo(h))||`<p class="empty">no messages yet</p>`,foot=inp("write a message, press enter");
+  else{body=bubbles([{from:c.from,text:c.text,ts:c.ts}]);
+    if(c.status==="pending")foot=mine?`<p class="dim">request sent. you can chat once @${esc(h)} accepts.</p>`:`<div class="rbar"><button data-a="rdec" data-i="${esc(c.id)}">decline</button><button class="go" data-a="racc" data-i="${esc(c.id)}">accept</button></div>`;
+    else foot=`<p class="dim">${mine?"this request wasn't accepted.":"you declined this request."}</p>`}
+  shell(`<div class="prof" style="margin-bottom:36px"><b>@${esc(h)}</b><p>${esc(u.bio||"")}</p></div><div class="msgs">${body}</div>${foot}`);
+  const n=convo(h).length;if(tlast.h!==h||tlast.n!==n){wantBottom=true;tlast={h,n}}
+  const i=$("m");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}}
+function notifList(){const n=notifs();
+  shell(`<h1 class="page">notifications</h1>`+(n.length?n.map(x=>`<a class="row" href="${esc(x.href)}"><div><b>${x.ts>nseen?"new ":""}</b>${esc(x.t)}</div><em>${ago(x.ts)}</em></a>`).join(""):`<p class="empty">nothing yet. likes, comments and messages show up here.</p>`))}
+function settings(){const m=store("theme")||"system",u=userOf(S.me),fs=store("fs")||"medium",ff=store("ff")||"sans";
+  const del=(remote||local)?`<div class="sec">account</div>`+(drafts.del?`<form id="df"><input class="in" id="dpw" type="password" placeholder="confirm with your password" autocomplete="current-password" aria-label="password" value="${esc(drafts.dpw||"")}"><div class="err">${esc(err||"this deletes your account, posts, comments and messages for good.")}</div><button class="go" ${busy?"disabled":""}>delete forever</button><button type="button" class="dim" data-a="delno" style="margin-left:22px">cancel</button></form>`:`<button class="dim" data-a="del">delete account</button>`):"";
+  shell(`<h1 class="page">settings</h1><label class="l" for="bio">bio</label><input class="in" id="bio" maxlength="80" value="${esc(u.bio||"")}" placeholder="press enter to save"><div class="set"><button data-a="theme">theme: ${m}</button><button data-a="fs">font size: ${fs}</button><button data-a="ff">font: ${ff}</button></div>${del}`)}
+let wantBottom=false;
+function render(soft){const y=scrollY;render0(soft);if(wantBottom){wantBottom=false;scrollTo(0,document.documentElement.scrollHeight)}else if(scrollY!==y)scrollTo(0,y);acSync()}
+function render0(soft){
+  const a=document.activeElement,fid=a&&a.id,pos=a&&a.selectionStart;
+  if(soft&&/^(h|pw|bio|dpw)$/.test(fid))return;
+  if(!ready){app.innerHTML='<div class="gate"><p>loading</p></div>';return}
+  if((remote||local)&&!me)return authRemote();
+  if(!got.p||!got.f){app.innerHTML='<div class="gate"><p>loading</p></div>';return}
+  build();
+  if(!S.me||loggedOut())return auth();
+  seen=+store("seen:"+me)||0;const r=route();
+  const views={feed,liked:()=>{tab="liked";history.replaceState(null,"","#/");feed()},p:()=>postView(r.a),u:()=>profile(r.a),messages,m:()=>thread(r.a),notifs:notifList,settings};try{(views[r.n]||feed)()}catch(x){app.innerHTML='<main><p class="empty">something broke: '+esc(x.message)+'</p></main>'}
+  if(fid&&fid!=="m"){const e=$(fid);if(e){e.focus();try{e.setSelectionRange(pos,pos)}catch(x){}}}
+}
+function authRemote(){const su=mode==="signup";
+  app.innerHTML=`<div class="gate"><h1>the message</h1><p>${esc(tag)}</p><form id="rf"><input class="in" id="h" placeholder="handle" maxlength="20" autocapitalize="none" autocomplete="username" spellcheck="false" aria-label="handle" value="${esc(drafts.h||"")}"><input class="in" id="pw" type="password" placeholder="password" maxlength="100" autocomplete="${su?"new-password":"current-password"}" aria-label="password"><div class="err">${esc(err||(su?"password: 8 characters or more":""))}</div><button class="go" ${busy?"disabled":""}>${su?"create account":"log in"}</button></form><button class="dim" id="sw" style="margin-top:28px">${su?"have an account? log in":"new here? create an account"}</button></div>`}
+const accts=()=>{try{return JSON.parse(store("tm_accts")||"{}")}catch(e){return{}}};
+const hpw=async(pw,salt)=>{const t=new TextEncoder();if(window.crypto&&crypto.subtle){const k=await crypto.subtle.importKey("raw",t.encode(salt+":"+pw),"PBKDF2",false,["deriveBits"]),b=await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:t.encode(salt),iterations:100000},k,256);return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}let h=5381;for(const c of salt+pw)h=(h*33^c.charCodeAt(0))>>>0;return"w"+h};
+async function localAuth(h,pw){const A=accts();
+  if(mode==="signup"){
+    if(!/^(?=.*[a-z0-9])[a-z0-9._]{2,20}$/.test(h)||h==="someone")throw new Error("handle: 2 to 20 letters, numbers, dots or underscores");
+    if(pw.length<8)throw new Error("password needs at least 8 characters");
+    if(A[h])throw new Error("that name is taken");
+    let P={};try{P=JSON.parse(store("tm_db")||"{}").profiles||{}}catch(e){}
+    const used=Object.values(A).map(a=>a.uid),old=Object.keys(P).find(k=>P[k].handle===h&&!used.includes(k));
+    const uid=old||"u"+Math.random().toString(36).slice(2,10),salt=Math.random().toString(36).slice(2);
+    A[h]={uid,salt,hash:await hpw(pw,salt)};store("tm_accts",JSON.stringify(A));
+    if(!old)await db.doc("profiles/"+uid).set({handle:h,bio:""});
+    me=uid}
+  else{const a=A[h];if(!a||await hpw(pw,a.salt)!==a.hash)throw new Error("wrong handle or password");me=a.uid}
+  store("tm_uid",me)}
+async function remoteAuth(){const h=$("h").value.trim().toLowerCase(),pw=$("pw").value;drafts.h=h;busy=true;err="";render();
+  if(local){try{await localAuth(h,pw);drafts.h="";start()}catch(x){err=x.message}busy=false;render();return}
+  try{const r=await fetch("/api/"+mode,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({handle:h,password:pw}),credentials:"same-origin"}),j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||"something went wrong");me=j.me;drafts.h="";start()}catch(x){err=x.message}busy=false;render()}
+async function delAccount(){const pw=drafts.dpw||"";if(!pw){err="enter your password";render();return}busy=true;err="";render();
+  try{
+    if(remote){const r=await fetch("/api/delete-account",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw}),credentials:"same-origin"}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"could not delete");location.hash="#/";location.reload();return}
+    const A=accts(),e=Object.entries(A).find(([h,a])=>a.uid===me);if(!e||await hpw(pw,e[1].salt)!==e[1].hash)throw new Error("wrong password");
+    let D={};try{D=JSON.parse(store("tm_db")||"{}")}catch(x){}
+    const mine=new Set(Object.keys(D.posts||{}).filter(k=>D.posts[k].by===me)),drop=(c,f)=>{if(D[c])Object.keys(D[c]).forEach(k=>{if(f(D[c][k]))delete D[c][k]})};
+    drop("posts",x=>x.by===me);drop("replies",x=>x.by===me||mine.has(x.post));drop("likes",x=>x.by===me||mine.has(x.post));drop("dms",x=>x.from===me||x.to===me);drop("dmreq",x=>x.from===me||x.to===me);
+    if(D.profiles)delete D.profiles[me];
+    store("tm_db",JSON.stringify(D));delete A[e[0]];store("tm_accts",JSON.stringify(A));store("tm_uid","");drafts.del=0;drafts.dpw="";location.hash="#/";location.reload();
+  }catch(x){err=x.message;busy=false;render()}}
+async function logout(){if(local){store("tm_uid","");location.hash="#/";location.reload();return}try{await fetch("/api/logout",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}",credentials:"same-origin"})}catch(e){}location.reload()}
+function compress(f,cap){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{URL.revokeObjectURL(u);let s=Math.min(1,1280/Math.max(im.width,im.height)),q=.78;
+   const run=()=>{const c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*s));c.height=Math.max(1,Math.round(im.height*s));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);
+    c.toBlob(b=>{if(!b)return rej();if(b.size>cap&&(q>.45||s>.3)){if(q>.45)q-=.12;else s*=.8;run()}else res(b)},"image/jpeg",q)};run()};
+  im.onerror=()=>rej();im.src=u})}
+const toData=b=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(b)});
+async function send(){const v=(drafts.t||"").trim(),b=drafts.blob;if((!v&&!b)||busy)return;busy=true;render();const o={by:me,text:v,ts:Date.now()};
+  try{if(b){if(assets)o.img=(await assets.upload(b)).id;else o.imgData=await toData(b)}await db.collection("posts").add(o);drafts.t="";drafts.blob=null;drafts.info="";if(drafts.url)URL.revokeObjectURL(drafts.url);drafts.url=""}catch(e){drafts.info="could not post. try again"}
+  busy=false;render()}
+function fail(e){toast="couldn't save. "+((e&&(e.message||e.code))||"you may need contributor access");render();clearTimeout(fail.t);fail.t=setTimeout(()=>{toast="";render(true)},5000)}
+let acs=null;
+const lev=(a,b)=>{const d=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return d[b.length]};
+const subseq=(q,h)=>{let i=0;for(const c of h)if(c===q[i])i++;return i===q.length};
+function suggest(q){const rank=h=>!q||h.startsWith(q)?0:h.includes(q)?1:subseq(q,h)?2:(d=>d<=2?3+d:99)(lev(q,h.slice(0,q.length+1)));
+  return S.users.filter(u=>u.handle!==S.me).map(u=>{const c=conn(u.handle);return{h:u.handle,r:rank(u.handle),c:c&&c.status==="accepted"?0:1,s:score(u.handle)}})
+    .filter(x=>x.r<99).sort((a,b)=>a.r-b.r||a.c-b.c||b.s-a.s||a.h.localeCompare(b.h)).slice(0,5)}
+function acClose(){acs=null;$("acl").hidden=true}
+function acPos(){const el=acs&&$(acs.id),box=$("acl");if(!el)return acClose();const r=el.getBoundingClientRect();
+  box.style.left=Math.max(12,Math.min(r.left,innerWidth-box.offsetWidth-12))+"px";
+  if(innerHeight-r.bottom<200){box.style.top="";box.style.bottom=(innerHeight-r.top+6)+"px"}else{box.style.bottom="";box.style.top=(r.bottom+6)+"px"}}
+function acDraw(){const box=$("acl");box.innerHTML=acs.items.map((x,i)=>`<button type="button" role="option" data-h="${esc(x.h)}" class="${i===acs.sel?"on":""}"><span>@${esc(x.h)}</span>${x.c===0?"<em>connection</em>":""}</button>`).join("");box.hidden=false;acPos()}
+function acUpdate(el){if(!S||!el||!(el.id==="t"||el.dataset.p)||document.activeElement!==el)return acClose();
+  const c=el.selectionStart,m=/(^|[^a-z0-9._@])@([a-z0-9._]{0,20})$/i.exec(el.value.slice(0,c));if(!m)return acClose();
+  const q=m[2].toLowerCase(),items=suggest(q);if(!items.length)return acClose();
+  acs={id:el.id,start:c-q.length-1,q,items,sel:acs&&acs.id===el.id&&acs.q===q?Math.min(acs.sel,items.length-1):0};acDraw()}
+function acSync(){if(acs)acUpdate($(acs.id))}
+function acPick(h){const el=acs&&$(acs.id);if(!el)return;const c=el.selectionStart,ins="@"+h+" ";
+  el.value=el.value.slice(0,acs.start)+ins+el.value.slice(c);const p=acs.start+ins.length;acClose();el.focus();el.setSelectionRange(p,p);el.dispatchEvent(new Event("input",{bubbles:true}))}
+$("acl").addEventListener("pointerdown",e=>{const b=e.target.closest("button");if(!b)return;e.preventDefault();acPick(b.dataset.h)});
+$("acl").addEventListener("mousedown",e=>e.preventDefault());
+app.addEventListener("focusout",e=>{if(acs&&e.target.id===acs.id)setTimeout(()=>{const a=document.activeElement;if(!a||a.id!==(acs&&acs.id))acClose()},150)});
+app.addEventListener("keyup",e=>{if(["ArrowUp","ArrowDown","Enter","Tab","Escape"].includes(e.key))return;acUpdate(e.target)});
+addEventListener("resize",()=>{if(acs)acPos()});
+function sendReply(id){const i=$("r-"+id);if(!i)return;const v=i.value.trim();if(!v)return;drafts["r"+id]="";const r={id:"tmp"+Date.now(),post:id,by:me,text:v,ts:Date.now()};rr.push(r);render();$("r-"+id)?.focus();
+  db.collection("replies").add({post:id,by:me,text:v,ts:r.ts}).catch(e=>{rr=rr.filter(x=>x!==r);fail(e)})}
+app.addEventListener("submit",e=>{e.preventDefault();if(e.target.id==="rf"){remoteAuth();return}if(e.target.id==="df"){delAccount();return}const h=$("h").value.trim().toLowerCase();drafts.h=h;
+  if(!/^(?=.*[a-z0-9])[a-z0-9._]{2,20}$/.test(h)){err="handle: 2 to 20 letters, numbers, dots or underscores";render();return}
+  if(h==="someone"||Object.keys(profs).some(k=>k!==me&&profs[k].handle===h)){err="that name is taken";render();return}
+  busy=true;err="";render();
+  (async()=>{try{const c=await db.doc("handles/"+h).get();if(c.exists&&c.data().uid!==me){err="that name is taken";return}
+    await db.doc("handles/"+h).set({uid:me});
+    const c2=await db.doc("handles/"+h).get();if(c2.exists&&c2.data().uid!==me){err="that name is taken";return}
+    await db.doc("profiles/"+me).set({handle:h,bio:""});store("out","0");drafts.h="";location.hash="#/"}
+  catch(x){err="could not create account. try again"}finally{busy=false;render()}})()});
+app.addEventListener("click",e=>{const T=e.target;let el;
+  if(menu&&!T.closest(".panel")&&!T.closest("#mn")){menu=false;render()}
+  if(T.closest("#mn")){menu=!menu;render();return}
+  if(T.closest('.panel a[href="#/"],a.brand')){tab="new";menu=false;setTimeout(()=>{render();scrollTo(0,0)});return}
+  if(T.closest(".panel a")){menu=false;setTimeout(()=>render())}
+  if(T.closest("#login")){store("out","0");location.hash="#/";render();return}
+  if(T.closest("#sw")){mode=mode==="login"?"signup":"login";err="";tag=pickTag();render();return}
+  if(T.closest("#out")&&(remote||local)){logout();return}
+  if(T.closest("#out")){store("out","1");menu=false;location.hash="#/";render();return}
+  if(T.closest("#post")){send();return}
+  if(T.closest("#save")){db.doc("profiles/"+me).set({handle:S.me,bio:$("bio").value.trim()}).catch(fail);return}
+  if(el=T.closest("[data-tab]")){tab=el.dataset.tab;if(route().n!=="feed")location.hash="#/";else render();return}
+  if(el=T.closest("[data-th]")){store("theme",el.dataset.th);theme(el.dataset.th);render();return}
+  const art=T.closest("article.post");if(art&&!T.closest("button,a,input,textarea")){location.hash="#/p/"+art.dataset.id;return}
+  if(!(el=T.closest("[data-a]")))return;const a=el.dataset.a,id=el.dataset.i;
+  if(a==="pick")$("f").click();
+  if(a==="racc"||a==="rdec"){const r=rq.find(x=>x.id===id);if(!r)return;const st=a==="racc"?"accepted":"declined",upd={from:r.from,to:r.to,text:r.text,ts:r.ts,status:st,ats:Date.now()};
+    rq=rq.map(x=>x.id===id?{...upd,id}:x);if(st==="accepted")rd.push({id:"tmp"+Date.now(),from:r.from,to:r.to,text:r.text,ts:r.ts});render();
+    db.doc("dmreq/"+id).set(upd).then(()=>st==="accepted"&&!remote?db.collection("dms").add({from:r.from,to:r.to,text:r.text,ts:r.ts}):0).catch(e=>{rq=rq.map(x=>x.id===id?r:x);fail(e)});return}
+  if(a==="back"){history.length>1?history.back():(location.hash="#/");return}
+  if(a==="rs")sendReply(id);
+  if(a==="sort"){const o=["new","trending","old","liked"];tab=o[(o.indexOf(tab)+1)%o.length];render()}
+  if(a==="fs"||a==="ff"){const o={fs:Object.keys(FS),ff:Object.keys(FF)}[a],d={fs:"medium",ff:"sans"}[a];store(a,o[(o.indexOf(store(a)||d)+1)%o.length]);look();render();return}
+  if(a==="del"){drafts.del=1;drafts.dpw="";err="";render();$("dpw")?.focus();return}
+  if(a==="delno"){drafts.del=0;drafts.dpw="";err="";render();return}
+  if(a==="theme"){const o=["system","light","dark"],n=o[(o.indexOf(store("theme")||"system")+1)%3];store("theme",n);theme(n);render()}
+  if(a==="rm"){if(drafts.url)URL.revokeObjectURL(drafts.url);drafts.blob=null;drafts.url="";drafts.info="";render()}
+  if(a==="c"){drafts["o"+id]=!drafts["o"+id];render();if(drafts["o"+id])$("r-"+id)?.focus()}
+  if(a==="l"){const d=db.doc("likes/"+id+"_"+me),mine=rl.find(l=>l.post===id&&l.by===me);
+    if(mine){rl=rl.filter(l=>l!==mine);render();db.doc("likes/"+mine.id).delete().catch(e=>{rl.push(mine);fail(e)})}
+    else{const l={id:id+"_"+me,post:id,by:me,ts:Date.now()};rl.push(l);render();d.set({post:id,by:me,ts:l.ts}).catch(e=>{rl=rl.filter(x=>x!==l);fail(e)})}}
+  if(a==="d"||a==="dr"){const k="c"+id;
+    if(!drafts[k]){drafts[k]=1;render();setTimeout(()=>{drafts[k]=0;render(true)},3000);return}
+    drafts[k]=0;
+    if(a==="d"){const x=rp.find(q=>q.id===id);rp=rp.filter(q=>q.id!==id);if(route().n==="p")location.hash="#/";else render();db.doc("posts/"+id).delete().catch(e=>{if(x)rp.push(x);fail(e)})}
+    else{const x=rr.find(q=>q.id===id);rr=rr.filter(q=>q.id!==id);render();db.doc("replies/"+id).delete().catch(e=>{if(x)rr.push(x);fail(e)})}}
+});
+app.addEventListener("change",async e=>{if(e.target.id!=="f"||!e.target.files[0])return;const f=e.target.files[0];
+  if(f.size>30*1048576){drafts.info="image is over 30mb. pick a smaller one";render();return}
+  drafts.info="compressing";render();
+  try{const b=await compress(f,assets?600*1024:120*1024);if(drafts.url)URL.revokeObjectURL(drafts.url);drafts.blob=b;drafts.url=URL.createObjectURL(b);drafts.info=kb(f.size)+" to "+kb(b.size)}catch(x){drafts.info="could not read that image"}render()});
+app.addEventListener("input",e=>{const t=e.target;
+  if(t.dataset.p)drafts["r"+t.dataset.p]=t.value;
+  if(t.id==="m")drafts["m"+route().a]=t.value;
+  if(t.id==="dpw")drafts.dpw=t.value;
+  if(t.id==="t"){drafts.t=t.value;$("post").disabled=!(t.value.trim()||drafts.blob)||busy}
+  acUpdate(t)});
+app.addEventListener("keydown",e=>{const t=e.target;
+  if(acs&&t.id===acs.id&&!e.isComposing){const k=e.key,n=acs.items.length;
+    if(k==="ArrowDown"||k==="ArrowUp"){e.preventDefault();acs.sel=(acs.sel+(k==="ArrowDown"?1:n-1))%n;acDraw();return}
+    if(k==="Enter"||k==="Tab"){e.preventDefault();acPick(acs.items[acs.sel].h);return}
+    if(k==="Escape"){e.preventDefault();acClose();return}}
+  if(t.id==="bio"&&e.key==="Enter"){db.doc("profiles/"+me).set({handle:S.me,bio:t.value.trim()}).catch(fail);t.blur();return}
+  if(t.id==="t"&&e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();send();return}
+  if(e.key!=="Enter"||!t.value||!t.value.trim())return;const v=t.value.trim();
+  if(t.dataset.p)sendReply(t.dataset.p);
+  if(t.id==="m"){const h=route().a,to=S.R[h];if(!to)return;const c=conn(h),ts=Date.now();drafts["m"+h]="";
+    if(!c){const r={from:me,to,text:v,status:"pending",ts},id=me+"_"+to;rq.push({...r,id});render();db.doc("dmreq/"+id).set(r).catch(e=>{rq=rq.filter(x=>x.id!==id);fail(e)})}
+    else if(c.status==="accepted"){const m={id:"tmp"+ts,from:me,to,text:v,ts};rd.push(m);render();db.collection("dms").add({from:me,to,text:v,ts}).catch(e=>{rd=rd.filter(x=>x!==m);fail(e)})}}});
+addEventListener("hashchange",()=>{menu=false;scrollTo(0,0);if(S&&S.me&&route().n==="notifs"){nseen=+store("seen:"+me)||0;store("seen:"+me,String(Date.now()))}render()});
+function localDb(){
+  let cols={};try{cols=JSON.parse(store("tm_db")||"{}")}catch(e){}
+  const subs=[],save=()=>store("tm_db",JSON.stringify(cols)),col=n=>cols[n]||(cols[n]={}),clone=o=>JSON.parse(JSON.stringify(o));
+  const snap=(n,ord)=>{const docs=Object.keys(col(n)).map(id=>({id,data:()=>clone(col(n)[id])}));if(ord)docs.sort((a,b)=>ord.dir==="desc"?b.data()[ord.f]-a.data()[ord.f]:a.data()[ord.f]-b.data()[ord.f]);return{docs}};
+  const fire=n=>subs.filter(s=>s.n===n).forEach(s=>setTimeout(()=>s.fn(snap(n,s.ord)),0));
+  const doc=path=>{const i=path.indexOf("/"),c=path.slice(0,i),id=path.slice(i+1);return{async get(){return{exists:id in col(c),data:()=>clone(col(c)[id]||{})}},async set(d){col(c)[id]=clone(d);save();fire(c)},async delete(){delete col(c)[id];save();fire(c)}}};
+  const collection=n=>{const q={ord:null,orderBy(f,dir){q.ord={f,dir};return q},limit(){return q},onSnapshot(fn){subs.push({n,fn,ord:q.ord});setTimeout(()=>fn(snap(n,q.ord)),0);return()=>{}},async add(d){const id=Math.random().toString(36).slice(2,12);col(n)[id]=clone(d);save();fire(n);return{id}},doc:id=>doc(n+"/"+id)};return q};
+  return{collection,doc};
+}
+function remoteDb(){
+  const subs=[],last={};
+  const call=(m,p,b)=>fetch("/api/"+p,{method:m,headers:b!==undefined?{"Content-Type":"application/json"}:{},body:b!==undefined?JSON.stringify(b):undefined,credentials:"same-origin"}).then(async r=>{const j=await r.json().catch(()=>({}));if(!r.ok){const e=new Error(j.error||"request failed");e.code=r.status;throw e}return j});
+  const snap=(docs,ord)=>{docs=docs.map(d=>({id:d.id,data:()=>({...d.data})}));if(ord)docs.sort((a,b)=>{const x=a.data()[ord.f]||0,y=b.data()[ord.f]||0;return ord.dir==="desc"?y-x:x-y});return{docs}};
+  const poll=async n=>{try{const j=await call("GET","c/"+n),k=JSON.stringify(j.docs);if(k===last[n])return;last[n]=k;subs.filter(s=>s.n===n).forEach(s=>s.fn(snap(j.docs,s.ord)))}catch(e){}};
+  setInterval(()=>{if(!document.hidden)[...new Set(subs.map(s=>s.n))].forEach(poll)},3000);
+  const doc=path=>{const i=path.indexOf("/"),c=path.slice(0,i),id=path.slice(i+1);return{async get(){const j=await call("GET","d/"+c+"/"+id);return{exists:j.exists,data:()=>j.data||{}}},async set(d){await call("PUT","d/"+c+"/"+id,d);poll(c)},async delete(){await call("DELETE","d/"+c+"/"+id,{});poll(c)}}};
+  const collection=n=>{const q={ord:null,orderBy(f,dir){q.ord={f,dir};return q},limit(){return q},onSnapshot(fn){subs.push({n,fn,ord:q.ord});last[n]=null;poll(n);return()=>{}},async add(d){const j=await call("POST","c/"+n,d);poll(n);return{id:j.id}},doc:id=>doc(n+"/"+id)};return q};
+  return{collection,doc};
+}
+const remoteAssets=()=>({async upload(blob){const r=await fetch("/api/upload",{method:"POST",headers:{"Content-Type":"image/jpeg"},body:blob,credentials:"same-origin"}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"upload failed");return{id:j.id}}});
+let timer=null;const later=()=>{clearTimeout(timer);timer=setTimeout(()=>render(true),60)};
+const rows=s=>s.docs.map(d=>({...d.data(),id:d.id}));
+function start(){if(started)return;started=true;
+  db.collection("posts").orderBy("ts","desc").limit(200).onSnapshot(s=>{rp=rows(s);got.p=1;later()});
+  db.collection("replies").limit(1000).onSnapshot(s=>{rr=rows(s);later()});
+  db.collection("dmreq").limit(1000).onSnapshot(s=>{rq=rows(s);later()});
+  db.collection("dms").limit(2000).onSnapshot(s=>{rd=rows(s);later()});
+  db.collection("likes").limit(2000).onSnapshot(s=>{rl=rows(s);later()});
+  db.collection("profiles").limit(500).onSnapshot(s=>{profs={};s.docs.forEach(d=>{profs[d.id]=d.data()});got.f=1;later()});
+}
+(async()=>{
+  try{user=await claude.use("user");db=await claude.use("db");assets=await claude.use("assets")}catch(e){}
+  if(user&&db){try{me=await user.id()}catch(e){}}
+  if(!db||!me){db=null;me=null;
+    try{const j=await(await fetch("/api/me",{credentials:"same-origin"})).json();if(j&&j.server){remote=true;me=j.me||null}}catch(e){}
+    if(remote){db=remoteDb();assets=remoteAssets()}
+    else{db=localDb();assets=null;local=true;const u=store("tm_uid");me=u&&Object.values(accts()).some(a=>a.uid===u)?u:null}}
+  ready=true;if(me)start();render();
+})();
+render();
+</script>
+</body>
+</html>

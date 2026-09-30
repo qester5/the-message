@@ -1,0 +1,13 @@
+# Optional. Lets Render set the site up for you (New + > Blueprint).
+# If you follow DEPLOY.md step by step you do not need this file.
+services:
+  - type: web
+    name: the-message
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        sync: false   # Render will ask you to paste your database link
